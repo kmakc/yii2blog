@@ -123,10 +123,53 @@ class Article extends \yii\db\ActiveRecord
     }
 
     /**
+     * @return $this
+     */
+    public function getTags()
+    {
+        return $this->hasMany(Tag::class, ['id' => 'tag_id'])
+            ->viaTable('article_tag', ['article_id' => 'id']);
+    }
+
+    /**
      * @return array
      */
-    public static function getCategoriesList()
+    public function getSelectedTags()
     {
-        return ArrayHelper::map(Category::find()->all(), 'id', 'title');
+        $selectedIds = $this
+            ->getTags()
+            ->select('id')
+            ->asArray()
+            ->all();
+
+        return ArrayHelper::getColumn($selectedIds, 'id');
+    }
+
+    /**
+     * @param  $tags
+     * @return $this
+     */
+    public function saveTags($tags)
+    {
+        if (is_array($tags)) {
+            $this->clearCurrentTags();
+            foreach ($tags as $tagId) {
+                /** @var ActiveRecordInterface $tag */
+                $tag = Tag::findOne($tagId);
+                $this->link('tags', $tag);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    private function clearCurrentTags()
+    {
+        ArticleTag::deleteAll(['article_id' => $this->id]);
+
+        return $this;
     }
 }

@@ -4,6 +4,7 @@ namespace app\modules\admin\controllers;
 
 use app\models\Category;
 use app\models\ImageUpload;
+use app\models\Tag;
 use Yii;
 use app\models\Article;
 use app\models\ArticleSearch;
@@ -159,7 +160,7 @@ class ArticleController extends Controller
         $article = $this->findModel($id);
 
         $selectedCategory = $article->category->id;
-        $categories       = Article::getCategoriesList();
+        $categories       = Category::getCategoriesList();
 
         if (Yii::$app->request->isPost) {
             $category = Yii::$app->request->post('category');
@@ -172,6 +173,29 @@ class ArticleController extends Controller
             'article'          => $article,
             'selectedCategory' => $selectedCategory,
             'categories'       => $categories,
+        ]);
+    }
+
+    /**
+     * @param $id
+     * @return string
+     * @throws NotFoundHttpException
+     */
+    public function actionSetTag($id)
+    {
+        $article = $this->findModel($id);
+        $selectedTags = $article->getSelectedTags();
+        $tags = Tag::getTagsList();
+
+        if (Yii::$app->request->isPost) {
+            $tags = Yii::$app->request->post('tags');
+            $article->saveTags($tags);
+            return $this->redirect(['view', 'id' => $article->id]);
+        }
+
+        return $this->render('tags', [
+            'selectedTags' => $selectedTags,
+            'tags'         => $tags,
         ]);
     }
 }
