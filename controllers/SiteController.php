@@ -65,6 +65,22 @@ class SiteController extends Controller
     }
 
     /**
+     * @return string
+     */
+    public function actionView()
+    {
+        return $this->render('single');
+    }
+
+    /**
+     * @return string
+     */
+    public function actionCategory()
+    {
+        return $this->render('category');
+    }
+
+    /**
      * Login action.
      *
      * @return Response|string
