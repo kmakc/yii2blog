@@ -24,7 +24,6 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
             'id',
             'title',
             'description:ntext',
@@ -38,12 +37,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     return Html::img($data->getImage(), ['width' => 200]);
                 }
             ],
-            //'image',
-            //'viewed',
-            //'user_id',
-            //'status',
-            //'category_id',
-
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>

@@ -1,14 +1,14 @@
 <?php
-
-/* @var $this \yii\web\View */
-/* @var $content string */
-
-use app\widgets\Alert;
+use yii\web\View;
 use yii\helpers\Html;
+use yii\widgets\Breadcrumbs;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
-use yii\widgets\Breadcrumbs;
+use app\widgets\Alert;
 use app\assets\AppAsset;
+
+/* @var View   $this */
+/* @var string $content  */
 
 AppAsset::register($this);
 ?>
@@ -25,12 +25,11 @@ AppAsset::register($this);
 </head>
 <body>
 <?php $this->beginBody() ?>
-
 <div class="wrap">
     <?php
     NavBar::begin([
         'brandLabel' => Yii::$app->name,
-        'brandUrl' => Yii::$app->homeUrl,
+        'brandUrl'   => Yii::$app->homeUrl,
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top',
         ],
@@ -38,20 +37,17 @@ AppAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
-            ['label' => 'Home', 'url' => ['/admin/default']],
-            ['label' => 'Articles', 'url' => ['/admin/article/index']],
-            ['label' => 'Comments', 'url' => ['/admin/comment/index']],
+            ['label' => 'Home',       'url' => ['/admin/default']],
+            ['label' => 'Articles',   'url' => ['/admin/article/index']],
+            ['label' => 'Comments',   'url' => ['/admin/comment/index']],
             ['label' => 'Categories', 'url' => ['/admin/category/index']],
-            ['label' => 'Tag', 'url' => ['/admin/tag/index']],
+            ['label' => 'Tag',        'url' => ['/admin/tag/index']],
         ],
     ]);
     NavBar::end();
     ?>
-
     <div class="container">
-        <?= Breadcrumbs::widget([
-            'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-        ]) ?>
+        <?= Breadcrumbs::widget(['links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : []]) ?>
         <?= Alert::widget() ?>
         <?= $content ?>
     </div>
@@ -60,11 +56,9 @@ AppAsset::register($this);
 <footer class="footer">
     <div class="container">
         <p class="pull-left">&copy; My Company <?= date('Y') ?></p>
-
         <p class="pull-right"><?= Yii::powered() ?></p>
     </div>
 </footer>
-
 <?php $this->endBody() ?>
 </body>
 </html>

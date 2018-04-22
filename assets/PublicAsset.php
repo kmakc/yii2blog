@@ -18,8 +18,8 @@ use yii\web\AssetBundle;
 class PublicAsset extends AssetBundle
 {
     public $basePath = '@webroot';
-    public $baseUrl = '@web';
-    public $css = [
+    public $baseUrl  = '@web';
+    public $css      = [
      'public/css/bootstrap.min.css',
      'public/css/font-awesome.min.css',
      'public/css/animate.min.css',
@@ -29,14 +29,16 @@ class PublicAsset extends AssetBundle
      'public/css/style.css',
      'public/css/responsive.css',
     ];
-    public $js = [
+
+    public $js       = [
         'public/js/bootstrap.min.js',
         'public/js/owl.carousel.min.js',
         'public/js/jquery.stickit.min.js',
         'public/js/menu.js',
         'public/js/scripts.js',
     ];
-    public $depends = [
+
+    public $depends  = [
         'yii\web\YiiAsset',
         'yii\bootstrap\BootstrapAsset',
     ];

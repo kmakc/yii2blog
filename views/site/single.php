@@ -1,5 +1,19 @@
 <?php
 use yii\helpers\Url;
+use yii\helpers\Html;
+use app\models\Article;
+use app\models\Comment;
+use app\models\Category;
+use app\models\CommentForm;
+
+/* @var Article     $article */
+/* @var Article[]   $popular */
+/* @var Article[]   $recent */
+/* @var Category[]  $categories */
+/* @var Comment[]   $comments */
+/* @var CommentForm $commentForm */
+
+$this->title = 'Article | ' . $article->title;
 ?>
 <div class="main-content">
     <div class="container">
@@ -7,24 +21,22 @@ use yii\helpers\Url;
             <div class="col-md-8">
                 <article class="post">
                     <div class="post-thumb">
-                        <a href="blog.html"><img src="<?= $article->getImage() ?>" alt=""></a>
+                        <?= Html::img($article->getImage()) ?>
                     </div>
                     <div class="post-content">
                         <header class="entry-header text-center text-uppercase">
                             <h6><a href="<?= Url::toRoute(['site/category', 'id' => $article->category->id]) ?>"><?= $article->category->title ?></a></h6>
-
-                            <h1 class="entry-title"><a href="blog.html"><?= $article->title ?></a></h1>
-
-
+                            <h1 class="entry-title"><?= $article->title ?></h1>
                         </header>
                         <div class="entry-content">
                             <?= $article->content ?>
                         </div>
+                        <!-- TODO: TAGS -->
                         <div class="decoration">
-                            <a href="#" class="btn btn-default">Decoration</a>
-                            <a href="#" class="btn btn-default">Decoration</a>
+                            <a href="#" class="btn btn-default">Tag1</a>
+                            <a href="#" class="btn btn-default">Tag2</a>
                         </div>
-
+                        <!-- TODO: TAGS -->
                         <div class="social-share">
 							<span
                                 class="social-share-title pull-left text-capitalize">By <?= $article->author->name ?> On <?= $article->getDate() ?></span>
@@ -38,13 +50,13 @@ use yii\helpers\Url;
                         </div>
                     </div>
                 </article>
-            <?= $this->render('/partials/comment', [
-                'article' => $article,
-                'comments' => $comments,
+            <?= $this->render('/partials/_comment', [
+                'article'     => $article,
+                'comments'    => $comments,
                 'commentForm' => $commentForm,
             ]) ?>
             </div>
-            <?= $this->render('/partials/sidebar', [
+            <?= $this->render('/partials/_sidebar', [
                 'popular'    => $popular,
                 'recent'     => $recent,
                 'categories' => $categories,

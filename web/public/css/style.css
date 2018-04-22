@@ -1185,7 +1185,7 @@ blog css
 .bottom-comment {
     background: #fff;
     padding: 20px;
-    margin: 50px 0;
+    margin: 10px 0;
     color: #212121;
     overflow: hidden;
 }
@@ -1638,4 +1638,11 @@ p.go-back-home a:hover {
     background: #00BFF3;
     color: #fff;
     border-color: #00BFF3;
+}
+
+.logout {
+    padding-top: 20px;
+}
+button:active, button:focus {
+    outline: none !important;
 }

@@ -1,16 +1,19 @@
 <?php
 namespace app\controllers;
 
-use app\models\SignupForm;
 use Yii;
 use yii\web\Controller;
 use yii\web\Response;
 use app\models\LoginForm;
-use app\models\User;
+use app\models\SignupForm;
 
+/**
+ * Class AuthController
+ * @package app\controllers
+ */
 class AuthController extends Controller{
     /**
-     * Login action.
+     * Login action
      *
      * @return Response|string
      */
@@ -32,7 +35,7 @@ class AuthController extends Controller{
     }
 
     /**
-     * Logout action.
+     * Logout action
      *
      * @return Response
      */
@@ -43,6 +46,11 @@ class AuthController extends Controller{
         return $this->goHome();
     }
 
+    /**
+     * Signup action
+     *
+     * @return Response|string
+     */
     public function actionSignup()
     {
         $model = new SignupForm();

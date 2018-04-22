@@ -37,8 +37,8 @@ class Comment extends \yii\db\ActiveRecord
         return [
             [['user_id', 'article_id', 'status'], 'integer'],
             [['text'], 'string', 'max' => 255],
-            [['article_id'], 'exist', 'skipOnError' => true, 'targetClass' => Article::className(), 'targetAttribute' => ['article_id' => 'id']],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
+            [['article_id'], 'exist', 'skipOnError' => true, 'targetClass' => Article::class, 'targetAttribute' => ['article_id' => 'id']],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
 
@@ -72,26 +72,37 @@ class Comment extends \yii\db\ActiveRecord
         return $this->hasOne(User::class, ['id' => 'user_id']);
     }
 
+    /**
+     * @return string
+     */
     public function getDate()
     {
         return Yii::$app->formatter->asDate($this->date);
     }
 
+    /**
+     * @return int
+     */
     public function isAllowed()
     {
         return $this->status;
     }
 
+    /**
+     * @return bool
+     */
     public function allow()
     {
         $this->status = self::STATUS_ALLOW;
         return $this->save(false);
     }
 
+    /**
+     * @return bool
+     */
     public function disallow()
     {
         $this->status = self::STATUS_DISALLOW;
         return $this->save(false);
     }
-
 }

@@ -40,11 +40,11 @@ class ArticleController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new ArticleSearch();
+        $searchModel  = new ArticleSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
-            'searchModel' => $searchModel,
+            'searchModel'  => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }
@@ -183,9 +183,9 @@ class ArticleController extends Controller
      */
     public function actionSetTag($id)
     {
-        $article = $this->findModel($id);
+        $article      = $this->findModel($id);
         $selectedTags = $article->getSelectedTags();
-        $tags = Tag::getTagsList();
+        $tags         = Tag::getTagsList();
 
         if (Yii::$app->request->isPost) {
             $tags = Yii::$app->request->post('tags');

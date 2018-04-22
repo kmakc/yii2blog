@@ -1,38 +1,40 @@
 <?php
-
 namespace app\controllers;
 
+use Yii;
+use yii\web\Response;
+use yii\web\Controller;
+use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
 use app\models\Article;
 use app\models\Category;
 use app\models\CommentForm;
-use Yii;
-use yii\filters\AccessControl;
-use yii\web\Controller;
-use yii\web\Response;
-use yii\filters\VerbFilter;
-use app\models\ContactForm;
 
+/**
+ * Class SiteController
+ * @package app\controllers
+ */
 class SiteController extends Controller
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function behaviors()
     {
         return [
             'access' => [
-                'class' => AccessControl::className(),
-                'only' => ['logout'],
+                'class' => AccessControl::class,
+                'only'  => ['logout'],
                 'rules' => [
                     [
                         'actions' => ['logout'],
-                        'allow' => true,
-                        'roles' => ['@'],
+                        'allow'   => true,
+                        'roles'   => ['@'],
                     ],
                 ],
             ],
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class'   => VerbFilter::class,
                 'actions' => [
                     'logout' => ['post'],
                 ],
@@ -41,7 +43,7 @@ class SiteController extends Controller
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function actions()
     {
@@ -57,20 +59,20 @@ class SiteController extends Controller
     }
 
     /**
-     * Displays homepage.
+     * Displays homepage
      *
      * @return string
      */
     public function actionIndex()
     {
-        $article       = Article::getAll(1);
-        $popular    = Article::getPopular();
-        $recent     = Article::getRecent();
-        $categories = Category::getAll();
+        $articles        = Article::getAll();
+        $popular         = Article::getPopular();
+        $recent          = Article::getRecent();
+        $categories      = Category::getAll();
 
         return $this->render('index', [
-            'articles'    => $article['articles'],
-            'pagination'  => $article['pagination'],
+            'articles'    => $articles['articles'],
+            'pagination'  => $articles['pagination'],
             'popular'     => $popular,
             'recent'      => $recent,
             'categories'  => $categories,
@@ -78,44 +80,51 @@ class SiteController extends Controller
     }
 
     /**
+     * Displays single article
+     *
+     * @param  $id    Article id
      * @return string
      */
     public function actionView($id)
     {
-        $article    = Article::findOne($id);
-        $popular    = Article::getPopular();
-        $recent     = Article::getRecent();
-        $categories = Category::getAll();
-        $comments   = $article->getArticleComments();
-        $commentForm = new CommentForm();
+        /* @var Article $article */
+        $article         = Article::findOne($id);
+        $popular         = Article::getPopular();
+        $recent          = Article::getRecent();
+        $categories      = Category::getAll();
+        $comments        = $article->getArticleComments();
+        $commentForm     = new CommentForm();
 
         $article->viewedCounter();
 
         return $this->render('single', [
-            'article' => $article,
-            'popular'    => $popular,
-            'recent'     => $recent,
-            'categories' => $categories,
+            'article'     => $article,
+            'popular'     => $popular,
+            'recent'      => $recent,
+            'categories'  => $categories,
             'comments'    => $comments,
             'commentForm' => $commentForm
         ]);
     }
 
+
     /**
+     * Displays categories list
+     *
+     * @param $id     Category id
      * @return string
      */
     public function actionCategory($id)
     {
-        $data = Category::getArticlesByCategory($id);
-
-        $popular    = Article::getPopular();
-        $recent     = Article::getRecent();
-        $categories = Category::getAll();
+        $categoryData = Category::getArticlesByCategory($id);
+        $popular      = Article::getPopular();
+        $recent       = Article::getRecent();
+        $categories   = Category::getAll();
 
 
         return $this->render('category', [
-            'articles'  => $data['articles'],
-            'pagination' => $data['pagination'],
+            'articles'   => $categoryData['articles'],
+            'pagination' => $categoryData['pagination'],
             'popular'    => $popular,
             'recent'     => $recent,
             'categories' => $categories,
@@ -123,45 +132,23 @@ class SiteController extends Controller
     }
 
     /**
-     * Displays contact page.
+     * Save comment
      *
-     * @return Response|string
+     * @param  $id      Article id
+     * @return Response
      */
-    public function actionContact()
-    {
-        $model = new ContactForm();
-        if ($model->load(Yii::$app->request->post()) && $model->contact(Yii::$app->params['adminEmail'])) {
-            Yii::$app->session->setFlash('contactFormSubmitted');
-
-            return $this->refresh();
-        }
-        return $this->render('contact', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
-     * Displays about page.
-     *
-     * @return string
-     */
-    public function actionAbout()
-    {
-        return $this->render('about');
-    }
-
-    public function actionComment($id)
+    public function actionPublishComment($id)
     {
         $model = new CommentForm();
 
-        if(Yii::$app->request->isPost)
-        {
+        if (Yii::$app->request->isPost) {
             $model->load(Yii::$app->request->post());
-            if($model->saveComment($id))
-            {
-                Yii::$app->getSession()->setFlash('comment', 'Your comment will be added soon!');
-                return $this->redirect(['site/view','id'=>$id]);
+            if ($model->saveComment($id)) {
+                Yii::$app->getSession()->setFlash('success', 'Your comment will be added soon!');
+                return $this->redirect(['site/view', 'id' => $id]);
             }
         }
+
+        return $this->redirect(['site/view']);
     }
 }
